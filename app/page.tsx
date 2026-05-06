@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  PricingTable,
   SignedIn,
   SignedOut,
   SignInButton,
@@ -330,62 +331,38 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section className="bg-background py-24 border-b border-border relative z-10" id="pricing">
+        <section className="bg-background py-24 border-b border-border relative" id="pricing">
           <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="mb-4">Simple, Transparent Pricing</h2>
               <p className="text-muted-foreground text-lg max-w-xl mx-auto">Choose the perfect plan to scale your inbox automation. No hidden fees.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-8">
-              {/* Free Plan */}
-              <div className="rounded-[1.5rem] border border-border bg-card p-8 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow relative z-10">
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-foreground mb-2">Starter</h3>
-                  <p className="text-muted-foreground text-sm">Perfect for individuals wanting to test the waters.</p>
-                </div>
-                <div className="mb-8">
-                  <span className="text-4xl font-bold text-foreground font-heading">$0</span>
-                  <span className="text-muted-foreground">/month</span>
-                </div>
-                <ul className="space-y-4 mb-8 flex-1">
-                  {["Basic email analysis", "100 automated replies/mo", "Standard support"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm font-medium">
-                      <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
-                      <span className="text-foreground/80">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <SignUpButton mode="modal">
-                  <Button variant="outline" className="w-full rounded-md h-12 text-base font-medium">Start for free</Button>
-                </SignUpButton>
-              </div>
-
-              {/* Pro Plan (Demo) */}
-              <div className="rounded-[1.5rem] border-2 border-primary bg-[#faefe5] p-8 flex flex-col h-full shadow-lg relative transform md:-translate-y-4 glow-container z-20">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-full shadow-sm whitespace-nowrap">
-                  Most Popular
-                </div>
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-foreground mb-2">Professional</h3>
-                  <p className="text-primary/80 text-sm">For power users who need full automation.</p>
-                </div>
-                <div className="mb-8">
-                  <span className="text-4xl font-bold text-foreground font-heading">$15</span>
-                  <span className="text-muted-foreground">/month</span>
-                </div>
-                <ul className="space-y-4 mb-8 flex-1">
-                  {["Unlimited email analysis", "Smart Drafts & Auto-reply", "Task Extraction to Todoist/Notion", "Calendar Autopilot negotiation", "Priority support"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm font-medium">
-                      <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
-                      <span className="text-foreground/80">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-12 text-base font-medium shadow-md shadow-primary/20">Upgrade to Pro</Button>
+              {/* Clerk Pricing Table (replaces Starter & Pro) */}
+              <div className="md:col-span-2">
+                <PricingTable 
+                  appearance={{
+                    elements: {
+                      rootBox: "w-full h-full",
+                      pricingTable: "grid md:grid-cols-2 gap-8 items-stretch h-full w-full",
+                      pricingTableCard: "rounded-[1.5rem] border border-border !bg-card p-8 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow relative w-full m-0 overflow-visible",
+                      pricingTableCardHeader: "mb-8",
+                      pricingTableCardTitle: "text-xl font-semibold text-foreground mb-2",
+                      pricingTableCardDescription: "text-muted-foreground text-sm",
+                      pricingTableCardPrice: "text-4xl font-bold text-foreground font-heading",
+                      pricingTableCardPricePeriod: "text-muted-foreground",
+                      pricingTableCardFeatures: "space-y-4 mb-8 flex-1 mt-8",
+                      pricingTableCardFeature: "flex items-start gap-3 text-sm font-medium text-foreground/80",
+                      pricingTableCardFeatureIcon: "h-5 w-5 text-primary shrink-0",
+                      pricingTableButton: "w-full rounded-md h-12 text-base font-medium mt-auto bg-primary text-primary-foreground hover:bg-primary/90",
+                      pricingTableCardDivider: "hidden",
+                    }
+                  }}
+                />
               </div>
 
               {/* Enterprise Plan (Demo) */}
-              <div className="rounded-[1.5rem] bg-[#362e28] border border-[#4a423b] text-white p-8 flex flex-col h-full shadow-md relative z-10">
+              <div className="rounded-[1.5rem] bg-[#362e28] border border-[#4a423b] text-white p-8 flex flex-col h-full shadow-md relative">
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-white mb-2">Enterprise</h3>
                   <p className="text-white/70 text-sm">Custom solutions for large teams and organizations.</p>
