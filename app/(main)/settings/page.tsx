@@ -7,10 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getOrCreateUser, getUserIntegrations } from "@/db/queries";
+import { getOrCreateUser, getUserIntegrations, deleteIntegration } from "@/db/queries";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { CalendarIcon, MailIcon } from "lucide-react";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { GoogleProvider } from "@/lib/google";
 
 export default async function SettingsPage() {
   const { userId: clerkId } = await auth();
@@ -46,6 +48,15 @@ export default async function SettingsPage() {
       integration: googleCalendarIntegration,
     },
   ];
+
+  const disconnectAction = async (formData: FormData) => {
+    "use server";
+    const providerKey = formData.get("providerKey") as GoogleProvider;
+    if (!providerKey) return;
+    await deleteIntegration(user.id, providerKey);
+    revalidatePath("/settings");
+  };
+
   return (
     <div className="page-wrapper ">
       <div className="mb-8 relative z-10">
@@ -80,12 +91,20 @@ export default async function SettingsPage() {
               </div>
               <div className="sm:shrink-0 flex items-center">
                 {provider.integration ? (
-                  <Badge className="bg-green-500/10 text-green-700 dark:text-green-400 hover:bg-green-500/20 border-green-500/20 px-4 py-1.5 text-sm font-medium rounded-full transition-colors">
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                      Connected
-                    </span>
-                  </Badge>
+                  <div className="flex items-center gap-3">
+                    <Badge className="bg-green-500/10 text-green-700 dark:text-green-400 hover:bg-green-500/20 border-green-500/20 px-4 py-1.5 text-sm font-medium rounded-full transition-colors">
+                      <span className="flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                        Connected
+                      </span>
+                    </Badge>
+                    <form action={disconnectAction}>
+                      <input type="hidden" name="providerKey" value={provider.key} />
+                      <Button type="submit" variant="outline" size="sm" className="rounded-full text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive transition-colors">
+                        Disconnect
+                      </Button>
+                    </form>
+                  </div>
                 ) : (
                   <Button asChild className="w-full sm:w-auto rounded-full px-6 font-medium shadow-sm hover:shadow bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
                     <a href={`/api/auth/google?provider=${provider.key}`}>

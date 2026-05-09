@@ -5,6 +5,14 @@ import { cookies } from "next/headers";
 import { getAuthUrl, GoogleProvider } from "@/lib/google";
 
 export async function GET(request: NextRequest) {
+  return handleAuth(request);
+}
+
+export async function POST(request: NextRequest) {
+  return handleAuth(request);
+}
+
+async function handleAuth(request: NextRequest) {
   //verify auth
   const { userId } = await auth();
   if (!userId) {

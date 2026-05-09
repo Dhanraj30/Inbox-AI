@@ -47,6 +47,14 @@ export async function getIntegration(userId: string, provider: GoogleProvider) {
   return integration ?? null;
 }
 
+export async function deleteIntegration(userId: string, provider: GoogleProvider) {
+  await db
+    .delete(integrations)
+    .where(
+      and(eq(integrations.userId, userId), eq(integrations.provider, provider)),
+    );
+}
+
 export async function upsertIntegration(data: {
   userId: string;
   provider: GoogleProvider;
